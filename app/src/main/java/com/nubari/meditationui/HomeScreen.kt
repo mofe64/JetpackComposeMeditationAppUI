@@ -40,7 +40,7 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
-            ChipSection(chips = listOf("Lagos", "Android", "London", "Detty December"))
+            ChipSection(chips = listOf("Lagos", "Android", "London", "Detty December", "Sapa", "Zazuu"))
             CurrentMeditation()
             FeatureSection(
                 features = listOf(
@@ -96,7 +96,8 @@ fun HomeScreen() {
                 BottomMenuContent("Sleep", R.drawable.ic_moon),
                 BottomMenuContent("Music", R.drawable.ic_music),
                 BottomMenuContent("Profile", R.drawable.ic_profile)
-            )
+            ),
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
@@ -186,6 +187,7 @@ fun CurrentMeditation(
             .clip(RoundedCornerShape(10.dp))
             .background(color)
             .padding(horizontal = 15.dp, vertical = 20.dp)
+            .fillMaxWidth()
     ) {
         Column() {
             Text(
@@ -427,11 +429,7 @@ fun BottomMenuItem(
     onItemClick: () -> Unit
 ) {
     val backGroundColor by animateColorAsState(
-        if (isSelected) activeHighlightColor else Color.Transparent,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioHighBouncy,
-            stiffness = Spring.StiffnessMedium
-        )
+        if (isSelected) activeHighlightColor else Color.Transparent
     )
     val textColor by animateColorAsState(
         if (isSelected) activeTextColor else inactiveTextColor
