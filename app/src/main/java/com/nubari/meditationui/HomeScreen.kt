@@ -1,9 +1,13 @@
 package com.nubari.meditationui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -15,10 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.nubari.meditationui.ui.theme.ButtonBlue
-import com.nubari.meditationui.ui.theme.DarkerButtonBlue
-import com.nubari.meditationui.ui.theme.DeepBlue
-import com.nubari.meditationui.ui.theme.TextWhite
+import com.nubari.meditationui.ui.theme.*
 
 @Composable
 fun HomeScreen() {
@@ -29,6 +30,8 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
+            ChipSection(chips = listOf("Lagos", "Android", "London", "Detty December"))
+            CurrentMeditation()
         }
     }
 }
@@ -70,9 +73,16 @@ fun ChipSection(
     var selectedChipIndex by remember {
         mutableStateOf(0)
     }
-
     LazyRow {
         items(chips.size) {
+            val chipBackGroundColor = animateColorAsState(
+                if (selectedChipIndex == it) ButtonBlue
+                else DarkerButtonBlue,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioHighBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
             Box(
                 contentAlignment = Alignment.Center,
                 modifier =
@@ -88,14 +98,57 @@ fun ChipSection(
                     }
                     .clip(RoundedCornerShape(10.dp))
                     .background(
-                        if (selectedChipIndex == it) ButtonBlue
-                        else DarkerButtonBlue
+                        chipBackGroundColor.value
                     )
                     .padding(15.dp)
             ) {
                 Text(text = chips[it], color = TextWhite)
             }
 
+        }
+    }
+}
+
+@Composable
+fun CurrentMeditation(
+    color: Color = LightRed
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(15.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color)
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+    ) {
+        Column() {
+            Text(
+                text = "Daily Hustle",
+                style = MaterialTheme.typography.h2
+            )
+            Text(
+                text = "Earn Your Daily 2k",
+                style = MaterialTheme.typography.body1,
+                color = TextWhite
+            )
+        }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(ButtonBlue)
+                .padding(10.dp)
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = R.drawable.ic_play
+                ),
+                contentDescription = "Play",
+                tint = Color.White,
+                modifier = Modifier.size(16.dp)
+            )
         }
     }
 }
